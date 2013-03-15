@@ -7,9 +7,6 @@ palette = [('titlebar', 'black', 'white'),
            ('quit button', 'dark red,bold', 'black'),
            ('getting quote', 'dark blue', 'black')]
 
-quote_box = None
-main_loop = None
-
 
 def create_header():
     text = urwid.Text(u'RANDOM QUOTES')
