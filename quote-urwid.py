@@ -7,27 +7,21 @@ palette = [('titlebar', 'black', 'white'),
            ('quit button', 'dark red,bold', 'black'),
            ('getting quote', 'dark blue', 'black')]
 
-header = None
-footer = None
 quote_box = None
 main_loop = None
 
 
 def create_header():
-    global header
     text = urwid.Text(u'RANDOM QUOTES')
-    header = urwid.AttrMap(text, 'titlebar')
-    return header
+    return urwid.AttrMap(text, 'titlebar')
 
 
 def create_footer():
-    global footer
-    text = urwid.Text([u'Press (',
+    return urwid.Text([u'Press (',
                        ('refresh button', u'R'),
                        u') to get a new quote, Press (',
                        ('quit button', u'Q'),
                        u') to quit'])
-    return text
 
 
 def create_quotebox():
