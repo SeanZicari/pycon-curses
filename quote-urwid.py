@@ -28,21 +28,24 @@ def create_quotebox():
     return urwid.LineBox(v_padding)
 
 
-def create_gui():
-    return urwid.Frame(header=create_header(), body=quote_box, footer=create_footer())
+def create_gui(body):
+    return urwid.Frame(header=create_header(), body=body, footer=create_footer())
 
 
-def handle_input(key):
-    if key == 'Q' or key == 'q':
-        raise urwid.ExitMainLoop()
-    elif key == 'R' or key == 'r':
-        quote_box.base_widget.set_text(('getting quote',
-                                               'Getting new quote...'))
-        main_loop.draw_screen()
-        quote_box.base_widget.set_text(get_new_joke())
+def run():
+    def handle_input(key):
+        if key == 'Q' or key == 'q':
+            raise urwid.ExitMainLoop()
+        elif key == 'R' or key == 'r':
+            quote_box.base_widget.set_text(('getting quote',
+                                                   'Getting new quote...'))
+            main_loop.draw_screen()
+            quote_box.base_widget.set_text(get_new_joke())
+
+    quote_box = create_quotebox()
+    main_loop = urwid.MainLoop(create_gui(quote_box), palette, unhandled_input=handle_input)
+    main_loop.run()
 
 
 if __name__ == '__main__':
-    quote_box = create_quotebox()
-    main_loop = urwid.MainLoop(create_gui(), palette, unhandled_input=handle_input)
-    main_loop.run()
+    run()
