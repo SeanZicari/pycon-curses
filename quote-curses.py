@@ -4,7 +4,7 @@ from getter import get_new_quote, get_new_joke
 
 quote_window = None
 quote_text_window = None
-main_window = None
+stdscr = None
 quote_pad = None
 
 
@@ -21,7 +21,7 @@ def setup_quote_window():
 
 
 def main_loop():
-    global main_window, quote_window, quote_text_window, qw_size
+    global stdscr, quote_window, quote_text_window, qw_size
 
     while True:
         c = quote_window.getch()
@@ -36,30 +36,30 @@ def main_loop():
         elif c == ord('q') or c == ord('Q'):
             break
 
-        main_window.noutrefresh()
+        stdscr.noutrefresh()
         quote_window.noutrefresh()
         quote_text_window.noutrefresh()
         curses.doupdate()
 
 
 def do_curses(win):
-    global main_window, quote_window, quote_text_window, quote_pad, qw_size
-    main_window = win
+    global stdscr, quote_window, quote_text_window, quote_pad, qw_size
+    stdscr = win
     qw_size = {'height': 15, 'width': curses.COLS}
 
-    init_curses(main_window)
+    init_curses(stdscr)
 
     # Output the current display size in reverse video
-    main_window.addstr("RANDOM QUOTES", curses.A_REVERSE)
+    stdscr.addstr("RANDOM QUOTES", curses.A_REVERSE)
     # Change the rest of the line to reverse video
-    main_window.chgat(-1, curses.A_REVERSE)
+    stdscr.chgat(-1, curses.A_REVERSE)
 
     # Set the menu up at the very last line of the screen
-    main_window.addstr(16, 0, "Press 'R' to request a new quote, 'Q' to quit", curses.COLOR_BLUE)
+    stdscr.addstr(16, 0, "Press 'R' to request a new quote, 'Q' to quit", curses.COLOR_BLUE)
     # Change the R to green
-    main_window.chgat(16,7, 1, curses.A_BOLD | curses.color_pair(2))
+    stdscr.chgat(16,7, 1, curses.A_BOLD | curses.color_pair(2))
     # Change the Q to red
-    main_window.chgat(16,35, 1, curses.A_BOLD | curses.color_pair(1))
+    stdscr.chgat(16,35, 1, curses.A_BOLD | curses.color_pair(1))
 
     # Set up the window to hold the random quotes
     quote_window = curses.newwin(qw_size['height'],qw_size['width'], 1,0)
@@ -73,7 +73,7 @@ def do_curses(win):
     # Draw a border around it
     quote_window.box()
 
-    main_window.noutrefresh()
+    stdscr.noutrefresh()
     quote_window.noutrefresh()
     curses.doupdate()
 
