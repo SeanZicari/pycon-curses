@@ -22,16 +22,14 @@ def create_footer():
 
 
 def create_quotebox():
-    global quote_box
     text = urwid.Text(u"Press (R) for a new quote!")
     filler = urwid.Filler(text, valign='top', top=1, bottom=1)
     v_padding = urwid.Padding(filler, left=1, right=1)
-    quote_box = urwid.LineBox(v_padding)
-    return quote_box
+    return urwid.LineBox(v_padding)
 
 
 def create_gui():
-    return urwid.Frame(header=create_header(), body=create_quotebox(), footer=create_footer())
+    return urwid.Frame(header=create_header(), body=quote_box, footer=create_footer())
 
 
 def handle_input(key):
@@ -45,6 +43,6 @@ def handle_input(key):
 
 
 if __name__ == '__main__':
-    global main_loop
+    quote_box = create_quotebox()
     main_loop = urwid.MainLoop(create_gui(), palette, unhandled_input=handle_input)
     main_loop.run()
