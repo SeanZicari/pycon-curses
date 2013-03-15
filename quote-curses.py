@@ -1,5 +1,6 @@
 import curses
-from urllib2 import urlopen, unquote
+from getter import get_new_quote, get_new_joke
+
 
 quote_window = None
 quote_text_window = None
@@ -12,6 +13,7 @@ def init_curses(main_win):
     main_win.keypad(1)
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_BLUE, curses.COLOR_BLACK)
 
 
 def setup_quote_window():
@@ -26,7 +28,10 @@ def main_loop():
 
         if c == ord('r') or c == ord('R'):
             quote_text_window.clear()
-            quote_text_window.addstr(0,0, get_new_quote())
+            quote_text_window.addstr("Getting quote...", curses.color_pair(3))
+            quote_text_window.refresh()
+            quote_text_window.clear()
+            quote_text_window.addstr(get_new_joke())
 
         elif c == ord('q') or c == ord('Q'):
             break
@@ -35,10 +40,6 @@ def main_loop():
         quote_window.noutrefresh()
         quote_text_window.noutrefresh()
         curses.doupdate()
-
-
-def get_new_quote():
-    return unquote(urlopen('http://www.iheartquotes.com/api/v1/random').read())
 
 
 def do_curses(win):
@@ -66,8 +67,9 @@ def do_curses(win):
     quote_window.keypad(1)
     # Create a sub-window so as to cleanly display the quote without worrying
     # about overwriting the quote window's borders
-    quote_text_window = quote_window.subwin(qw_size['height']-2, qw_size['width']-2, 2,1)
-    quote_text_window.addstr(get_new_quote())
+    quote_text_window = quote_window.subwin(qw_size['height']-4, qw_size['width']-4, 3,2)
+    quote_text_window.attron(curses.color_pair(0))
+    quote_text_window.addstr("Press 'R' to get your first quote!")
     # Draw a border around it
     quote_window.box()
 
