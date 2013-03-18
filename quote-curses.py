@@ -43,9 +43,8 @@ def main_loop():
 
 
 def do_curses(win):
-    global stdscr, quote_window, quote_text_window, quote_pad, qw_size
+    global stdscr, quote_window, quote_text_window, quote_pad
     stdscr = win
-    qw_size = {'height': 15, 'width': curses.COLS}
 
     init_curses(stdscr)
 
@@ -55,19 +54,19 @@ def do_curses(win):
     stdscr.chgat(-1, curses.A_REVERSE)
 
     # Set the menu up at the very last line of the screen
-    stdscr.addstr(16, 0, "Press 'R' to request a new quote, 'Q' to quit", curses.COLOR_BLUE)
+    stdscr.addstr(curses.LINES-1, 0, "Press 'R' to request a new quote, 'Q' to quit")
     # Change the R to green
-    stdscr.chgat(16,7, 1, curses.A_BOLD | curses.color_pair(2))
+    stdscr.chgat(curses.LINES-1,7, 1, curses.A_BOLD | curses.color_pair(2))
     # Change the Q to red
-    stdscr.chgat(16,35, 1, curses.A_BOLD | curses.color_pair(1))
+    stdscr.chgat(curses.LINES-1,35, 1, curses.A_BOLD | curses.color_pair(1))
 
     # Set up the window to hold the random quotes
-    quote_window = curses.newwin(qw_size['height'],qw_size['width'], 1,0)
+    quote_window = curses.newwin(curses.LINES-2,curses.COLS, 1,0)
     # Tell the quote window to pay attention to multi-byte key sequences
     quote_window.keypad(1)
     # Create a sub-window so as to cleanly display the quote without worrying
     # about overwriting the quote window's borders
-    quote_text_window = quote_window.subwin(qw_size['height']-4, qw_size['width']-4, 3,2)
+    quote_text_window = quote_window.subwin(curses.LINES-6,curses.COLS-4, 3,2)
     quote_text_window.attron(curses.color_pair(0))
     quote_text_window.addstr("Press 'R' to get your first quote!")
     # Draw a border around it
